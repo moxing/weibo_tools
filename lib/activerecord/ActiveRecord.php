@@ -4,19 +4,19 @@ if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300)
 
 define('PHP_ACTIVERECORD_VERSION_ID','1.0');
 
-include 'Singleton.php';
-include 'Config.php';
-include 'Utils.php';
-include 'DateTime.php';
-include 'Model.php';
-include 'Table.php';
-include 'ConnectionManager.php';
-include 'Connection.php';
-include 'SQLBuilder.php';
-include 'Reflections.php';
-include 'Inflector.php';
-include 'CallBack.php';
-include 'Exceptions.php';
+include_once dirname(__FILE__) .'/Singleton.php';
+include_once dirname(__FILE__) .'/Config.php';
+include_once dirname(__FILE__) .'/Utils.php';
+include_once dirname(__FILE__) .'/DateTime.php';
+include_once dirname(__FILE__) .'/Model.php';
+include_once dirname(__FILE__) .'/Table.php';
+include_once dirname(__FILE__) .'/ConnectionManager.php';
+include_once dirname(__FILE__) .'/Connection.php';
+include_once dirname(__FILE__) .'/SQLBuilder.php';
+include_once dirname(__FILE__) .'/Reflections.php';
+include_once dirname(__FILE__) .'/Inflector.php';
+include_once dirname(__FILE__) .'/CallBack.php';
+include_once dirname(__FILE__) .'/Exceptions.php';
 
 spl_autoload_register('activerecord_autoload');
 

@@ -8,21 +8,25 @@ if (isset($_REQUEST['code'])) {
 	$c = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
 	try {
 		$token = $c->getAccessToken( 'code', $keys );
+		$_SESSION['token'] = $token;
 	} catch (OAuthException $e) {
 		
 	}
-	if($token){
-		$_SESSION['token'] = $token;
-		// header("Location: index.php");
-		// $uid = $token['uid'];
-		// $weibo_token = WeiboToken::find('first',array('conditions' => array('uid=?' => $uid)));
-		// if($weibo_token){
-		// 	$weibo_token['expires_in'] = $token['expires_in'];
-		// 	$weibo_token.save();
-		// }else{
-		// 	WeiboToken::create($token);
-		// }
-	}
+}else{
+	$token = $_SESSION['token'];
 }
-
-
+if($token){
+	$uid = $token['uid'];
+	$weibo_token = WeiboToken::find('first',array('conditions' => array('uid=?' => $uid)));
+	if($weibo_token){
+		$weibo_token->access_token = $token['access_token'];
+		$weibo_token->expires_in = $token['expires_in'];
+	}else{
+		$weibo_token = new WeiboToken();
+		$weibo_token->uid = $token['uid'];
+		$weibo_token->access_token = $token['access_token'];
+		$weibo_token->expires_in = $token['expires_in'];
+	}
+	$weibo_token->save();
+}
+header("Location: index.php");

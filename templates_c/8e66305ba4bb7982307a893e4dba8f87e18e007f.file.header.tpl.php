@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-07-30 15:08:32
+<?php /* Smarty version Smarty-3.1.13, created on 2013-08-01 12:27:23
          compiled from "tpl\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2642651f762ac989680-32732138%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '8e66305ba4bb7982307a893e4dba8f87e18e007f' => 
     array (
       0 => 'tpl\\header.tpl',
-      1 => 1375167996,
+      1 => 1375331232,
       2 => 'file',
     ),
   ),
@@ -27,7 +27,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="assets/javascript/all.js"></script>    
     <link href="assets/stylesheets/default.css" rel="stylesheet">
-	<title></title>
+	<title>微博备份</title>
 </head>
 <body>
   <div class="navbar">

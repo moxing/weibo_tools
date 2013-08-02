@@ -12,12 +12,6 @@
 
 	session_start();
 
-	if($_SESSION['token']==null){
-		$GLOBALS['auth'] = false;
-	}else{
-		$GLOBALS['auth'] = true;
-	}
-
 	// function get_post_var($var)
 	// {
 	// 	$val = $_POST[$var];

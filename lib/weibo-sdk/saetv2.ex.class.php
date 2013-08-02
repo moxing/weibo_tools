@@ -564,7 +564,7 @@ class SaeTClientV2
 	 * @param int $feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
 	 * @return array
 	 */
-	function home_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0 )
+	function home_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0, $trim_user = 1 )
 	{
 		$params = array();
 		if ($since_id) {
@@ -579,6 +579,7 @@ class SaeTClientV2
 		$params['page'] = intval($page);
 		$params['base_app'] = intval($base_app);
 		$params['feature'] = intval($feature);
+		$params['trim_user'] = intval($trim_user);
 
 		return $this->oauth->get('statuses/home_timeline', $params);
 	}
@@ -598,9 +599,9 @@ class SaeTClientV2
 	 * @param int $feature 微博类型，0全部，1原创，2图片，3视频，4音乐. 返回指定类型的微博信息内容。转为为0。可选。
 	 * @return array
 	 */
-	function friends_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0 )
+	function friends_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0, $trim_user = 0)
 	{
-		return $this->home_timeline( $since_id, $max_id, $count, $page, $base_app, $feature);
+		return $this->home_timeline( $since_id, $max_id, $count, $page, $base_app, $feature, $feature, $trim_user);
 	}
 
 	/**

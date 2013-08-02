@@ -6,7 +6,7 @@
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="assets/javascript/all.js"></script>    
     <link href="assets/stylesheets/default.css" rel="stylesheet">
-	<title></title>
+	<title>微博备份</title>
 </head>
 <body>
   <div class="navbar">
