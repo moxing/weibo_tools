@@ -13,8 +13,8 @@
     <div class="navbar-inner navbar-static-top">
     <div class="container">
         <ul class="nav">
-          <li><a href="index.php">最新时间线</a></li>    
-          <li><a href="backup.php">我的备份列表</a></li>
+          <li {if $do=='index'}class="active"{/if}><a href="index.php">最新时间线</a></li>    
+          <li {if $do=='backup'}class="active"{/if}><a href="backup.php">我的备份列表</a></li>
         </ul>
         <ul class="nav pull-right">
             <li><a href="option.php"><i class="icon-cog"></i>设置</a></li>

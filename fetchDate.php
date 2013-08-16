@@ -9,9 +9,11 @@ class WeiboFetch
 
 	private $task;
 
+	private $token;
+
     public function __construct() {
-        $token = WeiboToken::first();
-        $this->client = new SaeTClientV2( WB_AKEY , WB_SKEY , $token->access_token);
+        $this->token = WeiboToken::first();
+        $this->client = new SaeTClientV2( WB_AKEY , WB_SKEY , $this->token->access_token);
     }
 
     public function getPosition(){
@@ -25,12 +27,27 @@ class WeiboFetch
     }
 
 	public function addStatus($s){
+		$status_id = $s['idstr'];
+
+		$st = Status::find('first',array('conditions' => array('id = ?', $status_id)));
+		
+		if($st!=null){
+			return;
+		}
+
+		if( isset($s['deleted']) ){
+			return;
+		}
+
 		$status = new Status();
+
+		echo "add new status \n";
+
 		$status->uid = $s['uid'];
 		if($s['text']!==null){
 			$status->text = $s['text']; 
 		}
-		$status->wb_id = $s['idstr'];
+		$status->id = $status_id;
 		if(isset($s['thumbnail_pic'])){
 			$status->thumbnail_pic = $s['thumbnail_pic']; 
 		}
@@ -46,58 +63,69 @@ class WeiboFetch
 	    $status->status_datetime = new DateTime($s['created_at']);
 	    if(isset($s['retweeted_status'])){
 	    	$ori_status = $this->addStatus($s['retweeted_status']);
-	    	$status->wb_ori_id = $ori_status->wb_id;
+	    	$status->ori_id = $s['retweeted_status']['idstr'];
 	    }
-
 		$status->save();
 		return $status;
 	}
 
-	public function importStatus(){
-		foreach ($this->status_list as $status) {
-			$s = $this->addStatus($status);
-			$this->task->current_id=$s->wb_id;
-			$this->task->save();
+	private function addUser($user){
+		$uid = $user['idstr'];
+		$wb_user = User::find('first',array('conditions' => array('uid = ?', $uid)));
+		if($wb_user != null){
+			return;
 		}
+		$wb_user = new User();
+		$wb_user->uid = $uid;
+		$wb_user->name = $user['name'];
+		$wb_user->profile_image_url = $user['profile_image_url'];
+		$wb_user->save();
+		return $wb_user;
 	}
 
-	public function startTask(){
-        $task = Task::last();
-        if($task===NULL){
-        	$status = Status::last();
-        	if($status===NULL){
-        		$since_id = 0;
-        	}else{
-        		$since_id = $status->wb_id;
-        	}
-        	$current_id = 0;
-        	$task = Status::create(array('since_id' => $since_id,'current_id' => $current_id));
-        }
-        $this->task = $task;
-        	
-		while ($this->task->since_id==0 || $this->taks->since_id < $this->task->current_id ) {
-			$page = 1;
-			$count = 50;
-			try{
-				$result = $this->client->home_timeline($page,$count,$this->task->since_id,$this->task->current_id);
-		    	if(isset($result['error_code'])){
-		    		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
-		    	}else{
-		    		$this->status_list = $result['statuses'];
-		    		$this->importStatus();		    		
-		    		$previous_id = echo number_format($result['next_cursor'],0,'.','');
-		    		if($previous_id>$task->since_id){
-		    			$this->task->current_id = $previous_id;
-		    			$this->task->save();
-		    		}
-		    	}				
-			} catch (Exception $e) {
-				echo  $e->getMessage();
-			}
-			
-		}
+	public function fetchUser($start_id = 0){
+		$result = $this->client->friends_by_id( $this->token->uid);
+    	if(isset($result['error_code'])){
+    		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
+    		return;
+    	}else{
+
+    		$next_cursor = $result['next_cursor'];
+    		$id = number_format($next_cursor, 0, '', '');
+    		$users = $result['users'];
+    		foreach ($users as $key => $user) {
+    			$this->addUser($user);
+    		}
+    		if($id != 0){
+    			$this->fetchUser($id);
+    		}
+    	}		
 	}
+
+	public function fetchStatus($start_id = 0){
+		$result = $this->client->home_timeline( 1, 50, 0, $start_id, 0, 0, 1 );
+    	if(isset($result['error_code'])){
+    		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
+    		return;
+    	}else{
+
+    		$total = $result['total_number'];
+    		$next_cursor = $result['next_cursor'];
+    		$id = number_format($next_cursor, 0, '', '');
+    		$status_list = $result['statuses'];
+    		foreach ($status_list as $key => $value) {
+    			$this->addStatus($value);
+    		}
+    		if($id != 0){
+    			$this->fetchStatus($id);
+    		}
+    	}
+	}
+
 }
 
 $o = new WeiboFetch();
-$o->getPosition();
+$o->fetchStatus();
+echo "Fetching weibo status finished.";
+// $o->fetchUser();
+// echo "Fetching weibo user finished.";

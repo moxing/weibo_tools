@@ -1,4 +1,7 @@
 /*body{background-color: #e9edee;}*/
 
 
-.login,.signup{margin-top: 100px;}
+.status-detail{border-color: #e6e6e6;border-bottom-width: 1px;border-bottom-style: solid;}
+
+.status:hover .status-op{display: block;}
+.ori-status:hover .ori-status-op{display: block;}

@@ -354,7 +354,7 @@ class SaeTOAuthV2 {
 		curl_setopt($ci, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ci, CURLOPT_ENCODING, "");
 		curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->ssl_verifypeer);
-		curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 1);
+		curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt($ci, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
 		curl_setopt($ci, CURLOPT_HEADER, FALSE);
 
@@ -384,7 +384,7 @@ class SaeTOAuthV2 {
 			}
 		} else {
 			if ( !defined('SAE_ACCESSKEY') ) {
-				$headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
+				// $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
 			}
 		}
 		curl_setopt($ci, CURLOPT_URL, $url );
@@ -564,7 +564,7 @@ class SaeTClientV2
 	 * @param int $feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
 	 * @return array
 	 */
-	function home_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0, $trim_user = 1 )
+	function home_timeline( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0, $trim_user = 0)
 	{
 		$params = array();
 		if ($since_id) {
@@ -604,6 +604,26 @@ class SaeTClientV2
 		return $this->home_timeline( $since_id, $max_id, $count, $page, $base_app, $feature, $feature, $trim_user);
 	}
 
+
+
+	function friends_timeline_ids( $page = 1, $count = 50, $since_id = 0, $max_id = 0, $base_app = 0, $feature = 0 )
+	{
+		$params = array();
+		if ($since_id) {
+			$this->id_format($since_id);
+			$params['since_id'] = $since_id;
+		}
+		if ($max_id) {
+			$this->id_format($max_id);
+			$params['max_id'] = $max_id;
+		}
+		$params['count'] = intval($count);
+		$params['page'] = intval($page);
+		$params['base_app'] = intval($base_app);
+		$params['feature'] = intval($feature);
+
+		return $this->oauth->get('statuses/friends_timeline/ids', $params);
+	}
 	/**
 	 * 获取用户发布的微博信息列表
 	 *
@@ -3258,7 +3278,7 @@ class SaeTClientV2
 	/**
 	 * @ignore
 	 */
-	protected function id_format(&$id) {
+	function id_format(&$id) {
 		if ( is_float($id) ) {
 			$id = number_format($id, 0, '', '');
 		} elseif ( is_string($id) ) {

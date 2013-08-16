@@ -12,21 +12,20 @@ if (isset($_REQUEST['code'])) {
 	} catch (OAuthException $e) {
 		
 	}
+}
+
+var_dump($token);
+$uid = $token['uid'];
+$weibo_token = WeiboToken::first($uid);
+if($weibo_token){
+	$weibo_token->access_token = $token['access_token'];
+	$weibo_token->expires_in = $token['expires_in'];
 }else{
-	$token = $_SESSION['token'];
+	$weibo_token = new WeiboToken();
+	$weibo_token->uid = $token['uid'];
+	$weibo_token->access_token = $token['access_token'];
+	$weibo_token->expires_in = $token['expires_in'];
 }
-if($token){
-	$uid = $token['uid'];
-	$weibo_token = WeiboToken::find('first',array('conditions' => array('uid=?' => $uid)));
-	if($weibo_token){
-		$weibo_token->access_token = $token['access_token'];
-		$weibo_token->expires_in = $token['expires_in'];
-	}else{
-		$weibo_token = new WeiboToken();
-		$weibo_token->uid = $token['uid'];
-		$weibo_token->access_token = $token['access_token'];
-		$weibo_token->expires_in = $token['expires_in'];
-	}
-	$weibo_token->save();
-}
+$weibo_token->save();
+
 header("Location: index.php");
