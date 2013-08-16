@@ -7,30 +7,17 @@ class WeiboFetch
 
 	private $contiune_fetch = false;
 
-	private $task;
-
 	private $token;
 
-    public function __construct() {
-        $this->token = WeiboToken::first();
+    public function __construct($uid) {
+        $this->token = WeiboToken::find($uid);
         $this->client = new SaeTClientV2( WB_AKEY , WB_SKEY , $this->token->access_token);
-    }
-
-    public function getPosition(){
-    	$result = $this->client->home_timeline( 1, 1, 0, 0, 0, 0, 1 );
-    	if(isset($result['error_code'])){
-    		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
-    	}else{
-    		echo number_format($result['next_cursor'],0,'.','');
-
-    	}
     }
 
 	public function addStatus($s){
 		$status_id = $s['idstr'];
-
-		$st = Status::find('first',array('conditions' => array('id = ?', $status_id)));
 		
+		$st = Status::find('first',array('conditions' => array('id = ?', $status_id)));
 		if($st!=null){
 			return;
 		}
@@ -71,12 +58,12 @@ class WeiboFetch
 
 	private function addUser($user){
 		$uid = $user['idstr'];
-		$wb_user = User::find('first',array('conditions' => array('uid = ?', $uid)));
+		$wb_user = User::find($uid);
 		if($wb_user != null){
 			return;
 		}
 		$wb_user = new User();
-		$wb_user->uid = $uid;
+		$wb_user->id = $uid;
 		$wb_user->name = $user['name'];
 		$wb_user->profile_image_url = $user['profile_image_url'];
 		$wb_user->save();
@@ -103,7 +90,7 @@ class WeiboFetch
 	}
 
 	public function fetchStatus($start_id = 0){
-		$result = $this->client->home_timeline( 1, 50, 0, $start_id, 0, 0, 1 );
+		$result = $this->client->home_timeline( 1, 1, 0, $start_id, 0, 0, 1 );
     	if(isset($result['error_code'])){
     		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
     		return;
@@ -124,7 +111,7 @@ class WeiboFetch
 
 }
 
-$o = new WeiboFetch();
+$o = new WeiboFetch('3681544727');
 $o->fetchStatus();
 echo "Fetching weibo status finished.";
 // $o->fetchUser();
