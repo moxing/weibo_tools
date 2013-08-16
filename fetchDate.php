@@ -5,7 +5,7 @@ class WeiboFetch
 {
 	private $client;
 
-	private $contiune_fetch = false;
+	private $repeat_count = 0;
 
 	private $token;
 
@@ -16,9 +16,10 @@ class WeiboFetch
 
 	public function addStatus($s){
 		$status_id = $s['idstr'];
-		
+
 		$st = Status::find('first',array('conditions' => array('id = ?', $status_id)));
 		if($st!=null){
+			$this->repeat_count = $this->repeat_count + 1;
 			return;
 		}
 
@@ -92,7 +93,7 @@ class WeiboFetch
 	public function fetchStatus($start_id = 0){
 		$result = $this->client->home_timeline( 1, 1, 0, $start_id, 0, 0, 1 );
     	if(isset($result['error_code'])){
-    		echo "error_code:".$result['error_code']."	error:".$reuslt['error'];
+    		echo "error_code:".$result['error_code']."\n";
     		return;
     	}else{
 
@@ -102,6 +103,9 @@ class WeiboFetch
     		$status_list = $result['statuses'];
     		foreach ($status_list as $key => $value) {
     			$this->addStatus($value);
+    		}
+    		if($this->repeat_count>5){
+    			return;
     		}
     		if($id != 0){
     			$this->fetchStatus($id);
