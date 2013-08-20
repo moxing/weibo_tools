@@ -34,3 +34,13 @@ CREATE TABLE `wb_user` (
   UNIQUE KEY `user_id` (`id`),
   KEY `idx_t` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `wb_task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `since_id` varchar(30) NOT NULL,
+  `current_id` varchar(30) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

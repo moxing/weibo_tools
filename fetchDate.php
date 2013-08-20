@@ -90,7 +90,8 @@ class WeiboFetch
     	}		
 	}
 
-	public function fetchStatus($start_id = 0){
+	public function fetchStatus($task,$start_id){
+
 		$result = $this->client->home_timeline( 1, 1, 0, $start_id, 0, 0, 1 );
     	if(isset($result['error_code'])){
     		echo "error_code:".$result['error_code']."\n";
@@ -103,20 +104,44 @@ class WeiboFetch
     		$status_list = $result['statuses'];
     		foreach ($status_list as $key => $value) {
     			$this->addStatus($value);
+    			$task->current_id = $value['idstr'];
+    			$task->save();
     		}
     		if($this->repeat_count>5){
     			return;
     		}
     		if($id != 0){
-    			$this->fetchStatus($id);
+    			$this->fetchStatus($task,$id);
     		}
     	}
+	}
+
+	public function backupStatusById( $id ){
+		if($status = Status::find($id) == null){
+			$result = $this->client->show_status($id);
+			if( $result['error_code'] == null){
+				$status = $this->addStatus($reuslt);
+			}
+		}
+		return $status;
+	} 
+
+	function startTask(){
+		$status = Status::last();
+		$task = new Task();
+		$task->since_id = $status->id;
+		$task->save();
+		$this->fetchStatus($task,0);
+
+		$task->status = 1 ;
+
+		$task->save();
 	}
 
 }
 
 $o = new WeiboFetch('3681544727');
-$o->fetchStatus();
+$o->startTask();
 echo "Fetching weibo status finished.";
 // $o->fetchUser();
 // echo "Fetching weibo user finished.";
