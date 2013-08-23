@@ -17,6 +17,7 @@ foreach ($status_list as $key => $s) {
 	$status['status'] = $s->status;
 	if(isset($s->thumbnail_pic)){
 		$status['thumbnail_pic'] = $s->thumbnail_pic;
+		$status['bmiddle_pic']	= $s->bmiddle_pic;
 	}
 	if($s->ori_status!=null){
 		$ori_status = array();
@@ -26,6 +27,7 @@ foreach ($status_list as $key => $s) {
 		$ori_status['status'] = $s->ori_status->status;
 		if(isset($s->ori_status->thumbnail_pic)){
 			$ori_status['thumbnail_pic'] = $s->ori_status->thumbnail_pic;
+			$ori_status['bmiddle_pic']	= $s->ori_status->bmiddle_pic;
 		}
 		$status['ori_status'] = $ori_status;
 	}

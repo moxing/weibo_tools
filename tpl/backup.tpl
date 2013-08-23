@@ -13,6 +13,14 @@
 		  <li {if $next==null}href="#" class="disabled"{/if}><a {if $next!=null}href="backup.php?page={$next}"{/if}>下一页</a></li>
 		</ul>     
     </div>
+    <div class="span4">
+        <div class="text-center"><strong>打印列表</strong></div>
+        <ul>
+         {foreach $pdf_list as $item}
+            <li>{$item.id}</li>         
+         {/foreach}         
+        </ul>
+    </div>
 </div>
 
 {include file="tpl/footer.tpl"}
