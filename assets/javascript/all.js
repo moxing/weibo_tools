@@ -28,8 +28,30 @@ $(function() {
             id   : o.attr('data-status')
           },
           success: function(data){
-            console.log(data)
+            console.log(data);
           }
         });
     })
+
+    $('.download-pic').click(function(){
+        var dp = $(this);
+        if( dp.parents('.ori-status').get(0)!=undefined ){
+            var o = dp.parents('.ori-status');
+        }else{
+            var o = dp.parents('.status');
+        }
+        $.ajax({
+          dataType: "json",
+          url: "a.php",
+          data: {
+            'do' : 'pic',
+             id  : o.attr('data-status')
+          },
+          success: function(data){
+            if(data.pic=='success'){
+                dp.hide();
+            }
+          }
+        });
+    });
 });

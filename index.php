@@ -1,5 +1,5 @@
 <?php
-require_once 'common.php';
+require '/lib/common.php';
 $GLOBALS['smarty']->assign('do', 'index');
 if(isset($_SESSION['token'])){
 	$token = $_SESSION['token'];
@@ -11,7 +11,6 @@ if(isset($_SESSION['token'])){
 	}else{
 		$timelines = xcache_get('timelines');
 	}
-
 	$GLOBALS['smarty']->assign('timelines',$timelines);
 	$GLOBALS['smarty']->display('tpl/index.tpl');
 }else{

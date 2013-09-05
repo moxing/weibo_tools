@@ -6,6 +6,9 @@
     {if $status.thumbnail_pic!=null}
       <label class="thumbnail clearfix span2">
         <img class="media-object status-img" src="{$status.thumbnail_pic}" data-bmiddle-pic="{$status.bmiddle_pic}">
+        {if $status.status==0}
+          <i class="icon-arrow-down pull-right download-pic"></i>
+        {/if}
       </label>
     {/if}
 
@@ -18,6 +21,9 @@
         {if $ori.thumbnail_pic!=null}
           <div class="thumbnail clearfix span2">
             <img class="media-object status-img" src="{$ori.thumbnail_pic}" data-bmiddle-pic="{$ori.bmiddle_pic}">
+            {if $ori.status==0}
+              <i class="icon-arrow-down pull-right download-pic"></i>
+            {/if}
           </div>
         {/if}
         <div class="span11">

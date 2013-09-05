@@ -1,5 +1,5 @@
 <?php
-require 'common.php';
+require './lib/common.php';
 $GLOBALS['smarty']->assign('do', 'backup');
 
 $p = isset($_GET['page'])?intval($_GET['page']) : 1;
@@ -7,9 +7,9 @@ $p = isset($_GET['page'])?intval($_GET['page']) : 1;
 $offset = ($p-1)*50;
 
 $status_list = Status::find('all',array('limit' => 50, 'offset' => $offset, 'order' => 'status_datetime desc'));
+
 $list = array();
-foreach ($status_list as $key => $s) {
-	
+foreach ($status_list as $key => $s) {	
 	$status = array();
 	$status['text'] = $s->text;
 	$status['id'] = $s->id;
@@ -42,8 +42,7 @@ if( count($status_list)==50 ){
 	$GLOBALS['smarty']->assign('next', $p+1);
 }
 
-// $pdf_list = Status::find('all',array('conditions' => 'status = 1'));
 
 $GLOBALS['smarty']->assign('status_list', $list);
-// $GLOBALS['smarty']->assign('pdf_list', $pdf_list);
+
 $GLOBALS['smarty']->display('tpl/backup.tpl');

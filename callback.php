@@ -1,5 +1,5 @@
 <?php
-require_once 'common.php';
+require '/lib/common.php';
 
 if (isset($_REQUEST['code'])) {
 	$keys = array();
@@ -14,7 +14,6 @@ if (isset($_REQUEST['code'])) {
 	}
 }
 
-var_dump($token);
 $uid = $token['uid'];
 $weibo_token = WeiboToken::first($uid);
 if($weibo_token){

@@ -1,5 +1,5 @@
 <?php
-require 'common.php';
+require "common.php";
 
 class WeiboFetch
 {
@@ -28,8 +28,6 @@ class WeiboFetch
 		}
 
 		$status = new Status();
-
-		echo "add new status \n";
 
 		$status->uid = $s['uid'];
 		if($s['text']!==null){
@@ -92,12 +90,11 @@ class WeiboFetch
 
 	public function fetchStatus($task,$start_id){
 
-		$result = $this->client->home_timeline( 1, 1, 0, $start_id, 0, 0, 1 );
+		$result = $this->client->home_timeline( 1, 50, 0, $start_id, 0, 0, 1 );
     	if(isset($result['error_code'])){
     		echo "error_code:".$result['error_code']."\n";
     		return;
     	}else{
-
     		$total = $result['total_number'];
     		$next_cursor = $result['next_cursor'];
     		$id = number_format($next_cursor, 0, '', '');
@@ -140,8 +137,8 @@ class WeiboFetch
 
 }
 
-$o = new WeiboFetch('3681544727');
-$o->startTask();
-echo "Fetching weibo status finished.";
+// $o = new WeiboFetch('3681544727');
+// $o->startTask();
+// echo "Fetching weibo status finished.";
 // $o->fetchUser();
 // echo "Fetching weibo user finished.";
