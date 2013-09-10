@@ -52,7 +52,4 @@ if( $do === 'pic' ){
 		$status->save();
 		echo json_encode(array('pic' => 'success'));
 	}
-	
-	// fastcgi_finish_request();
-	// exit;
 }

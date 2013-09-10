@@ -1,6 +1,7 @@
-INSTALL.txt
-LICENSE.txt
-README.txt
+LICENSE
+README.md
 lib/weibo-sdk/config.php
-templates_c/*
+weibo-img/
+lib/tcpdf
+Thumbs.db
 
