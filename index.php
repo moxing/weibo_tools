@@ -15,7 +15,7 @@ if(isset($_SESSION['token'])){
 	$GLOBALS['smarty']->display('tpl/index.tpl');
 }else{
 	$c = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
-	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL );
+	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL, true );
 	header("Location: {$code_url}");
 }
 

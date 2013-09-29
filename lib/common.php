@@ -14,18 +14,9 @@
 
 	session_start();
 
-	// function get_post_var($var)
-	// {
-	// 	$val = $_POST[$var];
-	// 	if (get_magic_quotes_gpc())
-	// 		$val = stripslashes($val);
-	// 	return $val;
-	// }
+	function filter_url($text){
+		return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', '<a href="$1">$1</a>', $text);
+	}
 
-	// function msg($msg,$type=0){
-	// 	$GLOBALS;
-	// 	$GLOBALS['smarty']->assign('message',$msg);
-	// 	$GLOBALS['smarty']->display('tpl/msg.tpl');
-	// 	exit;
-	// }
+
 

@@ -32,7 +32,7 @@ if( $do === 'delPdf' ){
 }
 
 if( $do === 'backup' ){
-	require '/lib/fetchData.php';
+	require 'lib/fetchData.php';
 	$o = new WeiboFetch('3681544727');
 	$o->startTask();	
 	echo json_encode(array('msg' => 'start task'));
@@ -42,10 +42,10 @@ if( $do === 'backup' ){
 
 if( $do === 'pic' ){	
 	$id = $_GET['id'];	
-	require '/lib/common.php';
+	require 'lib/common.php';
 	$status = Status::find($id);
 
-	require '/lib/fetchImg.php';
+	require 'lib/fetchImg.php';
 	$img = new fetchImg();
 	if($img->downloadImg($status->original_pic)){
 		$status->status = 1;

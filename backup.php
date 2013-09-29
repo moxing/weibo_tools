@@ -2,6 +2,14 @@
 require './lib/common.php';
 $GLOBALS['smarty']->assign('do', 'backup');
 
+$GLOBALS['smarty']->assign('do', 'index');
+if(isset($_SESSION['token'])==false){
+	$c = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
+	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL, true );
+	header("Location: {$code_url}");
+}
+
+
 $p = isset($_GET['page'])?intval($_GET['page']) : 1;
 
 $offset = ($p-1)*50;
@@ -11,7 +19,8 @@ $status_list = Status::find('all',array('limit' => 50, 'offset' => $offset, 'ord
 $list = array();
 foreach ($status_list as $key => $s) {	
 	$status = array();
-	$status['text'] = $s->text;
+
+	$status['text'] = filter_url($s->text);
 	$status['id'] = $s->id;
 	$status['datetime'] = $s->status_datetime->format('Y-m-d H:i:s');
 	$status['status'] = $s->status;
@@ -21,7 +30,7 @@ foreach ($status_list as $key => $s) {
 	}
 	if($s->ori_status!=null){
 		$ori_status = array();
-		$ori_status['text'] = $s->ori_status->text;
+		$ori_status['text'] = filter_url($s->ori_status->text);
 		$ori_status['id'] = $s->ori_status->id;
 		$ori_status['datetime'] = $s->ori_status->status_datetime->format('Y-m-d H:i:s');
 		$ori_status['status'] = $s->ori_status->status;
