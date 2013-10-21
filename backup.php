@@ -2,13 +2,14 @@
 require './lib/common.php';
 $GLOBALS['smarty']->assign('do', 'backup');
 
-$GLOBALS['smarty']->assign('do', 'index');
-if(isset($_SESSION['token'])==false){
+$weibo_token = WeiboToken::first(3681544727);
+$timestamp = time();
+$up = $weibo_token->updated_at;
+if($timestamp-$up->getTimestamp()>$weibo_token->expires_in){
 	$c = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
-	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL, true );
+	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL, 'true' );
 	header("Location: {$code_url}");
 }
-
 
 $p = isset($_GET['page'])?intval($_GET['page']) : 1;
 
