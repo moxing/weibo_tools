@@ -12,7 +12,7 @@
       </label>
     {/if}
 
-    {if $status.ori_status!=null}
+    {if $status.ori_status}
       {$ori=$status.ori_status}
       <div class="media-body status-detail well ori-status" data-status="{$ori.id}">
         <div class="media">
@@ -27,12 +27,13 @@
           </div>
         {/if}
         <div class="span11">
-          <label class="pull-left">{$ori.status_datetime|date_format:"%y-%m-%d"}</label>
+          <label class="pull-left">{$ori.datetime|date_format:"%y-%m-%d"}</label>
           <div class="pull-right hide ori-status-op">
             {if $ori.status == 0}
             <button class="btn btn-mini add-pw">图文</button>
             <button class="btn btn-mini add-p">图片</button>
             <button class="btn btn-mini add-w">文字</button>
+            <button class="btn btn-mini update-w">更新</button>
             {/if}
           </div>
         </div>             
@@ -45,6 +46,7 @@
             <button class="btn btn-mini add-pw">图文</button>
             <button class="btn btn-mini add-p">图片</button>
             <button class="btn btn-mini add-w">文字</button>
+            <button class="btn btn-mini update-w">更新</button>          
         {/if}
       </div>
     </div> 

@@ -93,7 +93,7 @@ class WeiboFetch
 		$result = $this->client->home_timeline( 1, 50, 0, $start_id, 0, 0, 1 );
     	if(isset($result['error_code'])){
     		echo "error_code:".$result['error_code']."\n";
-    		return;
+    		return array('error_code' => $result['error_code']);
     	}else{
     		$total = $result['total_number'];
     		$next_cursor = $result['next_cursor'];
@@ -111,6 +111,19 @@ class WeiboFetch
     			$this->fetchStatus($task,$id);
     		}
     	}
+	}
+
+	public function getStatus($id){
+		return $this->client->show_status($id);
+	}
+
+	public function update($id){
+		$status = $this->client->show_status($id);
+		$ori_st = Status::find('first',array('conditions' => array('id = ?', $id)));
+		// var_dump($ori_st);
+		$ori_st->text = $status['text'];
+		$ori_st->save();
+		return $status;
 	}
 
 	public function backupStatusById( $id ){

@@ -14,7 +14,7 @@ $(function() {
     	}    	
     });
 
-    $('.add-pw, .add-p, .add-w').click(function(){
+    $('.add-pw, .add-p, .add-w, .update-w').click(function(){
         if( $(this).parents('.ori-status').get(0)!=undefined ){
             var o = $(this).parents('.ori-status');
         }else{
@@ -24,8 +24,8 @@ $(function() {
           dataType: "json",
           url: "a.php",
           data: {
-            'do' : 'addPdf',
-            id   : o.attr('data-status')
+            'do' : 'update',
+             id   : o.attr('data-status')
           },
           success: function(data){
             console.log(data);
@@ -54,4 +54,6 @@ $(function() {
           }
         });
     });
+
+    $('.')
 });
