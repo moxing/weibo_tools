@@ -3,9 +3,12 @@ require './lib/common.php';
 $GLOBALS['smarty']->assign('do', 'backup');
 
 $weibo_token = WeiboToken::first(3681544727);
-$timestamp = time();
+$timestamp = new Datetime();
 $up = $weibo_token->updated_at;
-if($timestamp-$up->getTimestamp()>$weibo_token->expires_in){
+
+$up->add(new DateInterval('PT24H'));
+
+if($timestamp > $up){
 	$c = new SaeTOAuthV2( WB_AKEY , WB_SKEY );
 	$code_url = $c->getAuthorizeURL( WB_CALLBACK_URL, 'true' );
 	header("Location: {$code_url}");
